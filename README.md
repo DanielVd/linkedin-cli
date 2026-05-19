@@ -1,19 +1,38 @@
 # linkedin-cli
 
+[![CI](https://github.com/DanielVd/linkedin-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/DanielVd/linkedin-cli/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS-lightgrey)
+![License](https://img.shields.io/badge/license-unlicensed-lightgrey)
+
 A command-line client for LinkedIn Consumer APIs, inspired by `gogcli`.
+
+## Table of Contents
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Commands](#commands)
+- [Queue Jobs](#queue-jobs)
+- [Diagnostics](#diagnostics)
+- [Runtime Files](#runtime-files)
+- [Troubleshooting](#troubleshooting)
+- [Security Notes](#security-notes)
+- [Roadmap](#roadmap)
 
 ## Features
 
 - OAuth 2.0 login (browser + localhost callback)
 - Manual OAuth flow (`auth-url`, `exchange-token`)
-- Profile endpoints (`me`, `whoami`)
+- Profile commands (`me`, `whoami`)
 - Publishing commands:
   - `post-text`
   - `post-link`
   - `post-file`
   - `post-image`
   - `post-carousel`
-- Local queue/scheduler:
+- Local queue scheduler:
   - `queue-add`
   - `queue-list`
   - `queue-run`
@@ -23,22 +42,24 @@ A command-line client for LinkedIn Consumer APIs, inspired by `gogcli`.
 
 ## Requirements
 
-- Linux/macOS environment
-- Python 3.10+ (only required to build from source)
+- Linux or macOS
+- Python 3.10+ (only for local build from source)
 - LinkedIn Developer app with required products/scopes
 - Redirect URI configured in LinkedIn app (example: `http://localhost:8080/callback`)
 
-## Install
+## Installation
 
-### Prebuilt binary (local build output)
+### Option 1: System binary already installed
 
 ```bash
-./dist/linkedin-cli --help
+linkedin-cli --help
 ```
 
-### Build binary from source
+### Option 2: Build from source
 
 ```bash
+git clone https://github.com/DanielVd/linkedin-cli.git
+cd linkedin-cli
 python3 -m venv .venv
 . .venv/bin/activate
 pip install pyinstaller
@@ -48,10 +69,10 @@ pyinstaller --onefile --name linkedin-cli linkedin_cli.py
 
 ## Quick Start
 
-1) Configure app credentials:
+1) Configure credentials:
 
 ```bash
-./dist/linkedin-cli init-config \
+linkedin-cli init-config \
   --client-id "LINKEDIN_CLIENT_ID" \
   --client-secret "LINKEDIN_CLIENT_SECRET" \
   --redirect-uri "http://localhost:8080/callback" \
@@ -61,39 +82,54 @@ pyinstaller --onefile --name linkedin-cli linkedin_cli.py
 2) Login (default: no PKCE):
 
 ```bash
-./dist/linkedin-cli login
+linkedin-cli login
 ```
 
-3) Validate identity:
+3) Check identity:
 
 ```bash
-./dist/linkedin-cli whoami
+linkedin-cli whoami
 ```
 
-4) Publish a test post:
+4) Publish test post:
 
 ```bash
-./dist/linkedin-cli post-text --text "Hello from linkedin-cli" --visibility CONNECTIONS
+linkedin-cli post-text --text "Hello from linkedin-cli" --visibility CONNECTIONS
 ```
 
-## Command Overview
+## Commands
+
+List all commands:
 
 ```bash
-./dist/linkedin-cli --help
+linkedin-cli --help
 ```
 
-Key commands:
+Main command groups:
 
-- `init-config`: Save OAuth app credentials.
-- `show-config`: Print redacted local config.
-- `login`: Start browser OAuth flow and store token.
-- `auth-url`: Generate manual authorization URL.
-- `exchange-token`: Exchange `code` for access token.
-- `whoami` / `me`: Read profile info.
-- `post-*`: Publish content.
-- `queue-*`: Queue and run scheduled jobs.
-- `doctor`: Local environment diagnostics.
-- `oauth-debug`: Token exchange debugging.
+- Auth/config: `init-config`, `show-config`, `login`, `auth-url`, `exchange-token`
+- Profile: `whoami`, `me`
+- Publishing: `post-text`, `post-link`, `post-file`, `post-image`, `post-carousel`
+- Queue: `queue-add`, `queue-list`, `queue-run`
+- Diagnostics: `doctor`, `oauth-debug`
+
+## Queue Jobs
+
+Add and execute scheduled jobs:
+
+```bash
+linkedin-cli queue-add --type post_text --run-at "2026-05-19T08:30:00+00:00" --payload ./payload.json
+linkedin-cli queue-list
+linkedin-cli queue-run
+linkedin-cli queue-run --force
+```
+
+## Diagnostics
+
+```bash
+linkedin-cli doctor
+linkedin-cli oauth-debug --code "..."
+```
 
 ## Runtime Files
 
@@ -103,16 +139,21 @@ Key commands:
 
 ## Troubleshooting
 
-- `redirect_uri does not match`: ensure exact URI match between CLI config and LinkedIn app settings.
-- `invalid_client`: verify `client_id` + active `client_secret` for the exact same LinkedIn app.
-- `403` on publish: required product/scope not enabled for app.
+- `redirect_uri does not match`
+  - Ensure exact URI match between CLI config and LinkedIn app settings.
+- `invalid_client`
+  - Verify `client_id` + active `client_secret` belong to the same app.
+- `403` on publish commands
+  - Required LinkedIn products/scopes are missing for the app.
 
 ## Security Notes
 
-- Do not commit real client secrets.
-- Rotate secrets after sharing credentials.
-- Prefer token-based git auth over password in remote URLs.
+- Never commit real client secrets.
+- Rotate secrets after accidental sharing.
+- Prefer token/SSH auth for git remotes instead of passwords.
 
-## License
+## Roadmap
 
-No license file added yet.
+- Add `queue-daemon` background runner.
+- Add richer `whoami` output formatting options.
+- Add optional JSON schema validation for queue payloads.
