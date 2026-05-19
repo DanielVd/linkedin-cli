@@ -2,6 +2,23 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.1] - 2026-05-19
+
+### Changed
+
+- Enforced English-only user-facing runtime output across all CLI commands.
+- Improved README structure and added Contributing/Changelog references.
+
+### Fixed
+
+- Removed remaining non-English runtime strings in posting and profile steps.
+- Hardened CI English-only guard reliability.
+
+### CI
+
+- Installed `ripgrep` in GitHub Actions before English-only checks.
+- Updated GitHub Actions versions (`actions/checkout@v5`, `actions/setup-python@v6`).
+
 ## [0.1.0] - 2026-05-19
 
 ### Added
