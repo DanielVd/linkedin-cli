@@ -224,7 +224,7 @@ def cmd_login(args: argparse.Namespace) -> None:
 
     parsed = urllib.parse.urlparse(cfg["redirect_uri"])
     if parsed.scheme != "http" or not parsed.hostname or not parsed.port:
-        raise CliError("redirect_uri deve essere tipo: http://localhost:8080/callback")
+        raise CliError("redirect_uri must be like: http://localhost:8080/callback")
 
     state = secrets.token_urlsafe(24)
     code_verifier = None
