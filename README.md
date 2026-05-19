@@ -1,4 +1,5 @@
 # linkedin-cli
+[![Latest Release](https://img.shields.io/github/v/release/DanielVd/linkedin-cli)](https://github.com/DanielVd/linkedin-cli/releases/latest)
 
 ## Table of Contents
 
@@ -41,5 +42,4 @@
 ## License
 
 ## Existing Notes
-
 
