@@ -676,7 +676,7 @@ def cmd_oauth_debug(args: argparse.Namespace) -> None:
         body = err.read().decode("utf-8", errors="replace")
         print(f"HTTP {err.code}: {body}")
 
-    step_done("oauth debug completato")
+    step_done("oauth debug completed")
 
 
 def build_parser() -> argparse.ArgumentParser:
