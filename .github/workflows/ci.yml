@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  english-only-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: English-only guard
+        run: |
+          set -euo pipefail
+          PATTERN='\\b(errore|carico|salv|mostra|genera|pubblica|profilo|coda|diagnostica|mancante|non trovato|fallito|completato|prendo|attendo|apri|scambio|inizio|immagine|testo|autore|vuoto|aggiunto|esegue|abilita|disabilita|chiamo|formato|deve)\\b'
+          if rg -n -i --hidden --glob '!.git' --glob '!dist/*' --glob '!build/*' "$PATTERN" .; then
+            echo "Italian text detected. Failing."
+            exit 1
+          fi
+
+      - name: Syntax check
+        run: python -m py_compile linkedin_cli.py
+
+      - name: Build single-file binary
+        run: |
+          python -m pip install --upgrade pip pyinstaller
+          pyinstaller --onefile --name linkedin-cli linkedin_cli.py
+
+      - name: Smoke test help
+        run: ./dist/linkedin-cli --help >/dev/null
