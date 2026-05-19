@@ -286,7 +286,7 @@ def cmd_me(_: argparse.Namespace) -> None:
     step_start("load token")
     cfg = load_config()
     token = ensure_token(cfg)
-    step_start("chiamo userinfo")
+    step_start("call userinfo")
     data = http_get_json(USERINFO_URL, token)
     print(json.dumps(data, indent=2))
     step_done("profile received")
@@ -296,7 +296,7 @@ def cmd_whoami(_: argparse.Namespace) -> None:
     step_start("load token")
     cfg = load_config()
     token = ensure_token(cfg)
-    step_start("chiamo userinfo")
+    step_start("call userinfo")
     data = http_get_json(USERINFO_URL, token)
 
     linkedin_id = data.get("sub", "")
