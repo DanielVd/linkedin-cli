@@ -688,7 +688,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_init.add_argument("--client-secret", required=True)
     p_init.add_argument("--redirect-uri", required=True)
     p_init.add_argument("--scopes", help="csv scopes")
-    p_init.add_argument("--linkedin-version", default="202605", help="header Linkedin-Version, formato YYYYMM")
+    p_init.add_argument("--linkedin-version", default="202605", help="Linkedin-Version header, format YYYYMM")
     p_init.set_defaults(func=cmd_init_config)
 
     p_cfg = sub.add_parser("show-config", help="show redacted config")
