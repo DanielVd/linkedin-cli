@@ -1,23 +1,54 @@
 # linkedin-cli
 
-CLI LinkedIn Consumer API stile gogcli.
+A command-line client for LinkedIn Consumer APIs, inspired by `gogcli`.
 
-## Cosa fa
+## Features
 
-- OAuth2 LinkedIn con comando `login` automatico (browser + callback localhost)
-- Modalità manuale (`auth-url` + `exchange-token`)
-- Lettura profilo (`me`, `whoami`)
-- Pubblicazione post (`post-text`, `post-link`, `post-file`, `post-image`, `post-carousel`)
-- Queue scheduler locale (`queue-add`, `queue-list`, `queue-run`)
-- Diagnostica (`doctor`, `oauth-debug`)
+- OAuth 2.0 login (browser + localhost callback)
+- Manual OAuth flow (`auth-url`, `exchange-token`)
+- Profile endpoints (`me`, `whoami`)
+- Publishing commands:
+  - `post-text`
+  - `post-link`
+  - `post-file`
+  - `post-image`
+  - `post-carousel`
+- Local queue/scheduler:
+  - `queue-add`
+  - `queue-list`
+  - `queue-run`
+- Diagnostics:
+  - `doctor`
+  - `oauth-debug`
 
-## Requisiti
+## Requirements
 
-- Python 3.10+
-- App LinkedIn configurata in LinkedIn Developer Portal
-- Redirect URI HTTP locale, esempio: `http://localhost:8080/callback`
+- Linux/macOS environment
+- Python 3.10+ (only required to build from source)
+- LinkedIn Developer app with required products/scopes
+- Redirect URI configured in LinkedIn app (example: `http://localhost:8080/callback`)
 
-## Setup
+## Install
+
+### Prebuilt binary (local build output)
+
+```bash
+./dist/linkedin-cli --help
+```
+
+### Build binary from source
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install pyinstaller
+pyinstaller --onefile --name linkedin-cli linkedin_cli.py
+./dist/linkedin-cli --help
+```
+
+## Quick Start
+
+1) Configure app credentials:
 
 ```bash
 ./dist/linkedin-cli init-config \
@@ -27,56 +58,61 @@ CLI LinkedIn Consumer API stile gogcli.
   --scopes "openid,profile,w_member_social"
 ```
 
-## Login
-
-Default: **no-PKCE** (compatibile col tuo scenario n8n)
+2) Login (default: no PKCE):
 
 ```bash
 ./dist/linkedin-cli login
 ```
 
-Per abilitare PKCE:
-
-```bash
-./dist/linkedin-cli login --pkce
-```
-
-## API
+3) Validate identity:
 
 ```bash
 ./dist/linkedin-cli whoami
-./dist/linkedin-cli me
-
-./dist/linkedin-cli post-text --text "Ciao LinkedIn da CLI" --visibility PUBLIC
-./dist/linkedin-cli post-link --text "Leggi" --url "https://example.com" --visibility PUBLIC
-./dist/linkedin-cli post-file --path ./post.txt --visibility PUBLIC
-./dist/linkedin-cli post-image --path ./img.png --text "Foto" --visibility PUBLIC
-./dist/linkedin-cli post-carousel --paths ./1.png ./2.png --text "Carousel" --visibility PUBLIC
 ```
 
-## Queue
+4) Publish a test post:
 
 ```bash
-./dist/linkedin-cli queue-add --type post_text --run-at "2026-05-19T08:30:00+00:00" --payload ./payload.json
-./dist/linkedin-cli queue-list
-./dist/linkedin-cli queue-run
-./dist/linkedin-cli queue-run --force
+./dist/linkedin-cli post-text --text "Hello from linkedin-cli" --visibility CONNECTIONS
 ```
 
-## Diagnostica
+## Command Overview
 
 ```bash
-./dist/linkedin-cli doctor
-./dist/linkedin-cli oauth-debug --code "..."
+./dist/linkedin-cli --help
 ```
 
-## File runtime
+Key commands:
+
+- `init-config`: Save OAuth app credentials.
+- `show-config`: Print redacted local config.
+- `login`: Start browser OAuth flow and store token.
+- `auth-url`: Generate manual authorization URL.
+- `exchange-token`: Exchange `code` for access token.
+- `whoami` / `me`: Read profile info.
+- `post-*`: Publish content.
+- `queue-*`: Queue and run scheduled jobs.
+- `doctor`: Local environment diagnostics.
+- `oauth-debug`: Token exchange debugging.
+
+## Runtime Files
 
 - Config: `~/.config/linkedin-cli/config.json`
 - Queue: `~/.config/linkedin-cli/queue.json`
 - Log: `~/.config/linkedin-cli/linkedin-cli.log`
 
-## Nota importante
+## Troubleshooting
 
-LinkedIn limita scope/endpoint in base al prodotto abilitato su app.
-Se un comando post fallisce con `403`, mancano permessi/scope/prodotto corretti.
+- `redirect_uri does not match`: ensure exact URI match between CLI config and LinkedIn app settings.
+- `invalid_client`: verify `client_id` + active `client_secret` for the exact same LinkedIn app.
+- `403` on publish: required product/scope not enabled for app.
+
+## Security Notes
+
+- Do not commit real client secrets.
+- Rotate secrets after sharing credentials.
+- Prefer token-based git auth over password in remote URLs.
+
+## License
+
+No license file added yet.
