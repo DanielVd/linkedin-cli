@@ -339,7 +339,7 @@ def cmd_post_text(args: argparse.Namespace) -> None:
         step_done("preview payload ready")
         return
 
-    step_start("pubblico post")
+    step_start("publish post")
     resp = http_post_json(POSTS_URL, token, payload)
     print(json.dumps(resp, indent=2))
     step_done("post published")
