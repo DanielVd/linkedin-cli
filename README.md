@@ -4,6 +4,7 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS-lightgrey)
 ![License](https://img.shields.io/badge/license-unlicensed-lightgrey)
+[![Latest Release](https://img.shields.io/github/v/release/DanielVd/linkedin-cli)](https://github.com/DanielVd/linkedin-cli/releases/latest)
 
 A command-line client for LinkedIn Consumer APIs, inspired by `gogcli`.
 
