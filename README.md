@@ -20,6 +20,8 @@ A command-line client for LinkedIn Consumer APIs, inspired by `gogcli`.
 - [Troubleshooting](#troubleshooting)
 - [Security Notes](#security-notes)
 - [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [Changelog](#changelog)
 
 ## Features
 
@@ -157,3 +159,11 @@ linkedin-cli oauth-debug --code "..."
 - Add `queue-daemon` background runner.
 - Add richer `whoami` output formatting options.
 - Add optional JSON schema validation for queue payloads.
+
+## Contributing
+
+See `CONTRIBUTING.md`.
+
+## Changelog
+
+See `CHANGELOG.md`.
