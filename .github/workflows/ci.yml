@@ -20,7 +20,7 @@ jobs:
         run: |
           set -euo pipefail
           PATTERN='\\b(errore|carico|salv|mostra|genera|pubblica|profilo|coda|diagnostica|mancante|non trovato|fallito|completato|prendo|attendo|apri|scambio|inizio|immagine|testo|autore|vuoto|aggiunto|esegue|abilita|disabilita|chiamo|formato|deve)\\b'
-          if rg -n -i --hidden --glob '!.git' --glob '!dist/*' --glob '!build/*' "$PATTERN" .; then
+          if rg -n -i --hidden --glob '!.git' --glob '!dist/*' --glob '!build/*' --glob '!.github/workflows/ci.yml' "$PATTERN" .; then
             echo "Italian text detected. Failing."
             exit 1
           fi
